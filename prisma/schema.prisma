@@ -12,10 +12,11 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
+model Users {
   userId Int @id @default(autoincrement())
   name String
   email String @unique
+  passwordHash String
   subjects Subject[]
 }
 
@@ -23,7 +24,7 @@ model Subject {
   subjectId Int @id @default(autoincrement())
   name String
   userId Int 
-  user User @relation(fields:[userId], references:[userId])
+  user Users @relation(fields:[userId], references:[userId])
   assignments Assignment[]
   tasks Task[]
   exams Exam[]
