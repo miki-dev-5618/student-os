@@ -27,7 +27,6 @@ export async function createUser(formData: FormData) {
     console.log('User created successfully');
   } catch (error) {
     console.error('Error creating user:', error);
-    return { success: false, message: 'Error creating user' };
   }
 
   revalidatePath('/dashboard');

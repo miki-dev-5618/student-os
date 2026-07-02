@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
@@ -12,51 +7,51 @@ datasource db {
   provider = "postgresql"
 }
 
-model Users {
-  userId Int @id @default(autoincrement())
-  name String
-  email String @unique
-  passwordHash String
-  subjects Subject[]
-}
-
 model Subject {
-  subjectId Int @id @default(autoincrement())
-  name String
-  userId Int 
-  user Users @relation(fields:[userId], references:[userId])
+  subjectId   Int          @id @default(autoincrement())
+  name        String
+  userId      Int
   assignments Assignment[]
-  tasks Task[]
-  exams Exam[]
+  exams       Exam[]
+  user        User         @relation(fields: [userId], references: [userId])
+  tasks       Task[]
 }
 
 model Assignment {
-  assignmentId Int @id @default(autoincrement())
-  name String
-  deadline DateTime
-  subjectId Int 
-  subject Subject @relation(fields:[subjectId], references:[subjectId])
+  assignmentId Int      @id @default(autoincrement())
+  name         String
+  deadline     DateTime
+  subjectId    Int
+  subject      Subject  @relation(fields: [subjectId], references: [subjectId])
+}
+
+model Task {
+  taskId      Int        @id @default(autoincrement())
+  title       String
+  description String
+  deadline    DateTime
+  status      TaskStatus
+  subjectId   Int?
+  subject     Subject?   @relation(fields: [subjectId], references: [subjectId])
+}
+
+model Exam {
+  examId    Int      @id @default(autoincrement())
+  examDate  DateTime
+  subjectId Int
+  subject   Subject  @relation(fields: [subjectId], references: [subjectId])
+}
+
+model User {
+  userId   Int       @id @default(autoincrement())
+  name     String
+  email    String    @unique
+  password String
+  subjects Subject[]
 }
 
 enum TaskStatus {
   TODO
   IN_PROGRESS
   DONE
-}
-
-model Task {
-  taskId Int @id @default(autoincrement())
-  title String
-  description String
- deadline DateTime
- status TaskStatus
-  subjectId Int? 
-  subject Subject? @relation(fields:[subjectId], references:[subjectId])
-}
-
-model Exam {
-  examId Int @id @default(autoincrement())
-  examDate DateTime
-  subjectId Int 
-  subject Subject @relation(fields:[subjectId], references:[subjectId])
 }
