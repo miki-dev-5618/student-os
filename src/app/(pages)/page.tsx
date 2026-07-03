@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { Navbar } from '../components/navbar';
 import { Footer } from '../components/footer';
 import { GeistPixelSquare } from 'geist/font/pixel';
 import { FaArrowRight, FaBookOpen, FaClipboardCheck, FaRegCalendarAlt, FaChartLine } from 'react-icons/fa';
@@ -7,8 +6,6 @@ import { FaArrowRight, FaBookOpen, FaClipboardCheck, FaRegCalendarAlt, FaChartLi
 export default function Home() {
   return (
     <div className='flex flex-col min-h-screen bg-zinc-50 font-sans text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50 transition-colors duration-300'>
-      <Navbar />
-
       <main className='flex-1 flex flex-col items-center w-full px-4 sm:px-8 md:px-16 py-16 sm:py-24 max-w-7xl mx-auto'>
 
         {/* Hero Section */}
