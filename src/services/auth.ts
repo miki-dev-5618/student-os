@@ -26,7 +26,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!user) {
           throw new Error('Invalid credentials');
         }
-        const valid = await verifyPassword(password, user.passwordHash);
+        const valid = await verifyPassword(password, user.password);
         if (!valid) {
           return null;
         }
