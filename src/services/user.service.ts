@@ -54,3 +54,49 @@ export async function getUserByEmail(email: string) {
   return user;
 }
 
+export async function getUserAssignments(userId: number) {
+  return await sql`
+    SELECT * FROM "Assignment"
+    WHERE "subjectId" IN (
+      SELECT "subjectId" FROM "Subject" WHERE "userId" = ${userId}
+    )
+  `;
+}
+
+export async function getUserTasks(userId: number) {
+  return await sql`
+    SELECT * FROM "Task"
+    WHERE "subjectId" IN (
+      SELECT "subjectId" FROM "Subject" WHERE "userId" = ${userId}
+    )
+  `;
+}
+
+export async function getUserExams(userId: number) {
+  return await sql`
+    SELECT * FROM "Exam"
+    WHERE "subjectId" IN (
+      SELECT "subjectId" FROM "Subject" WHERE "userId" = ${userId}
+    )
+  `;
+} export async function getUserSubjects(userId: number) {
+  return await sql`
+    SELECT * FROM "Subject"
+    WHERE "subjectId" IN (
+      SELECT "subjectId" FROM "Subject" WHERE "userId" = ${userId}
+    )
+  `;
+}
+
+export async function getPendingTasks(userId: number) {
+  return await sql`
+    SELECT *
+    FROM "Task"
+    WHERE "subjectId" IN (
+      SELECT "subjectId"
+      FROM "Subject"
+      WHERE "userId" = ${userId}
+    )
+    AND "status" IN ('TODO', 'IN_PROGRESS');
+  `;
+}

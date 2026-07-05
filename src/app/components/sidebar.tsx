@@ -76,7 +76,7 @@ const data = {
     ],
 };
 
-interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> { }
+type SidebarProps = React.HTMLAttributes<HTMLDivElement>;
 
 export function Sidebar({ className, ...props }: SidebarProps) {
     const pathname = usePathname();
