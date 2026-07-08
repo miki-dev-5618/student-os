@@ -74,8 +74,10 @@ export async function getUserTasks(userId: number) {
 
 export async function getUserExams(userId: number) {
   return await sql`
-    SELECT * FROM "Exam"
-    WHERE "subjectId" IN (
+    SELECT e.*, s.name as "subjectName"
+    FROM "Exam" e
+    LEFT JOIN "Subject" s ON e."subjectId" = s."subjectId"
+    WHERE e."subjectId" IN (
       SELECT "subjectId" FROM "Subject" WHERE "userId" = ${userId}
     )
   `;
@@ -90,13 +92,17 @@ export async function getUserExams(userId: number) {
 
 export async function getPendingTasks(userId: number) {
   return await sql`
-    SELECT *
-    FROM "Task"
-    WHERE "subjectId" IN (
+    SELECT t.*, s.name as "subjectName"
+    FROM "Task" t
+    LEFT JOIN "Subject" s on t."subjectId" = s."subjectId"
+    WHERE t."subjectId" IN (
       SELECT "subjectId"
       FROM "Subject"
       WHERE "userId" = ${userId}
+
     )
-    AND "status" IN ('TODO', 'IN_PROGRESS');
+    AND t."status" IN ('TODO', 'IN_PROGRESS')
+          ORDER BY "deadline" ASC
+
   `;
 }
