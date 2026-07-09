@@ -1,6 +1,5 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -13,6 +12,8 @@ model Subject {
   userId      Int
   assignments Assignment[]
   exams       Exam[]
+  createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
   user        User         @relation(fields: [userId], references: [userId])
   tasks       Task[]
 }
@@ -22,7 +23,11 @@ model Assignment {
   name         String
   deadline     DateTime
   subjectId    Int
+  createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
   subject      Subject  @relation(fields: [subjectId], references: [subjectId])
+  status      WorkStatus @default(TODO)
+
 }
 
 model Task {
@@ -30,16 +35,24 @@ model Task {
   title       String
   description String
   deadline    DateTime
-  status      TaskStatus
+  status      WorkStatus @default(TODO)
   subjectId   Int?
+  createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
   subject     Subject?   @relation(fields: [subjectId], references: [subjectId])
 }
 
 model Exam {
+  title String
   examId    Int      @id @default(autoincrement())
   examDate  DateTime
   subjectId Int
   subject   Subject  @relation(fields: [subjectId], references: [subjectId])
+  reflection String?
+  createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+      status      ExamStatus @default(UPCOMING)
+
 }
 
 model User {
@@ -48,10 +61,46 @@ model User {
   email    String    @unique
   password String
   subjects Subject[]
+  activityLog ActivityLog[]
 }
 
-enum TaskStatus {
+model ActivityLog{
+  activityId Int @id @default(autoincrement())
+  userId      Int
+  entityType EntityType
+  entityId Int
+  titleSnapshot String
+  createdAt DateTime @default(now())
+  action Action
+
+  user        User         @relation(fields: [userId], references: [userId])
+}
+
+enum EntityType{
+  TASK
+  ASSIGNMENT
+  EXAM
+}
+enum Action{
+  TASK_CREATED
+TASK_COMPLETED
+TASK_REOPENED
+TASK_DELETED
+EXAM_CREATED
+EXAM_COMPLETED
+EXAM_UPDATED
+ASSIGNMENT_CREATED
+ASSIGNMENT_COMPLETED
+}
+enum ExamStatus{
+  UPCOMING
+  COMPLETED
+  MISSED
+  CANCELLED
+}
+enum WorkStatus {
   TODO
   IN_PROGRESS
   DONE
 }
+

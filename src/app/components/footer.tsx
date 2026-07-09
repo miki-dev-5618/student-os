@@ -1,6 +1,6 @@
 import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
 
-export function Footer() {
+export default function Footer() {
   return (
     <footer className='w-full border-t border-black/10 bg-zinc-50 dark:border-white/10 dark:bg-zinc-950 py-12 px-6 sm:px-16 mt-auto transition-colors duration-300'>
       <div className='max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8'>

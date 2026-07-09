@@ -4,12 +4,10 @@ import postgres from 'postgres';
 import { revalidatePath } from 'next/cache';
 import { forbidden, redirect } from 'next/navigation';
 import { saltAndHashPassword } from '@/services/password';
-import { userSchema } from '@/services/zod'
+import { userSchema } from '@/services/zod';
 import { AuthError } from 'next-auth';
 import { signIn } from '@/services/auth';
 const sql = postgres(process.env.DATABASE_URL!, { ssl: 'require' });
-
-
 
 const CreateUser = userSchema.omit({ userId: true });
 
@@ -81,14 +79,8 @@ export async function getUserExams(userId: number) {
       SELECT "subjectId" FROM "Subject" WHERE "userId" = ${userId}
     )
   `;
-} export async function getUserSubjects(userId: number) {
-  return await sql`
-    SELECT * FROM "Subject"
-    WHERE "subjectId" IN (
-      SELECT "subjectId" FROM "Subject" WHERE "userId" = ${userId}
-    )
-  `;
 }
+
 
 export async function getPendingTasks(userId: number) {
   return await sql`
@@ -104,5 +96,14 @@ export async function getPendingTasks(userId: number) {
     AND t."status" IN ('TODO', 'IN_PROGRESS')
           ORDER BY "deadline" ASC
 
+  `;
+}
+
+export async function getRecentActivity(userId: number) {
+  return await sql`
+    SELECT * FROM "ActivityLog"
+    WHERE "userId" = ${userId}
+    ORDER BY "createdAt" DESC
+    LIMIT 10
   `;
 }

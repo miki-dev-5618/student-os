@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Footer } from '../components/footer';
+import Footer from '../components/footer';
 import { GeistPixelSquare } from 'geist/font/pixel';
 import { FaArrowRight, FaBookOpen, FaClipboardCheck, FaRegCalendarAlt, FaChartLine } from 'react-icons/fa';
 import {auth} from '@/services/auth';
