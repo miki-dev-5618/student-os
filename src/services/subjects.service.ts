@@ -12,7 +12,17 @@ export async function getUserSubjects(userId: number) {
     )
   `;
 }
-
+export async function createSubject(subjectName: string, userId: number) {
+  try {
+    await sql`
+  INSERT INTO "Subject" ("name", "userId" )
+  VALUES (${subjectName}, ${userId})
+`;
+  } catch (error) {
+    console.error('Error creating subject: ', error);
+    throw error;
+  }
+}
 export async function getSubjectExams(userId: number) {
   return await sql`
     SELECT e.*, s.name as "subjectName"
@@ -22,7 +32,7 @@ export async function getSubjectExams(userId: number) {
       SELECT "subjectId" FROM "Subject" WHERE "userId" = ${userId}
     )
   `;
-}
+} 
 export async function getSubjectTasks(userId: number) {
   return await sql`
     SELECT t.*, s.name as "subjectName"
@@ -44,6 +54,3 @@ export async function getSubjectAssignments(userId: number) {
   `;
 }
 
-export async function createSubject(userId: number){
-  
-}
