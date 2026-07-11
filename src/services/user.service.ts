@@ -6,7 +6,8 @@ import { forbidden, redirect } from 'next/navigation';
 import { saltAndHashPassword } from '@/services/password';
 import { userSchema } from '@/services/zod';
 import { AuthError } from 'next-auth';
-import { signIn } from '@/services/auth';
+import { signIn, auth } from '@/services/auth';
+
 const sql = postgres(process.env.DATABASE_URL!, { ssl: 'require' });
 
 const CreateUser = userSchema.omit({ userId: true });
@@ -52,6 +53,26 @@ export async function getUserByEmail(email: string) {
   return user;
 }
 
+export async function requireCurrentUser() {
+  const session = await auth();
+  if (!session) {
+    redirect('/login');
+  }
+
+  const email = session.user?.email;
+  if (!email) {
+    redirect('/login');
+  }
+
+  const user = await getUserByEmail(email);
+
+  if (!user) {
+    redirect('/login');
+  }
+
+  return user;
+}
+
 export async function getUserAssignments(userId: number) {
   return await sql`
     SELECT * FROM "Assignment"
@@ -80,7 +101,6 @@ export async function getUserExams(userId: number) {
     )
   `;
 }
-
 
 export async function getPendingTasks(userId: number) {
   return await sql`

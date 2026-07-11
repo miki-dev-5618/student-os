@@ -1,5 +1,4 @@
 import { auth, signOut } from '@/services/auth';
-import { redirect } from 'next/navigation';
 import {
   FaCalendarDays,
   FaFolderOpen,
@@ -14,6 +13,7 @@ import {
   getUserAssignments,
   getRecentActivity,
 } from '@/services/user.service';
+import { redirect } from 'next/navigation';
 import { getUserSubjects } from '@/services/subjects.service';
 import { getGreeting } from '@/services/greeting';
 import StatsCard from '@/app/components/StatsCard';
