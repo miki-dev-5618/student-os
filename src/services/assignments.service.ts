@@ -1,5 +1,4 @@
 import postgres from 'postgres';
-import { requireCurrentUser } from '@/services/user.service';
 
 const sql = postgres(process.env.DATABASE_URL!, { ssl: 'require' });
 

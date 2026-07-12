@@ -55,6 +55,7 @@ export async function getUserByEmail(email: string) {
 
 export async function requireCurrentUser() {
   const session = await auth();
+  console.log('SESSION:', session);
   if (!session) {
     redirect('/login');
   }
@@ -65,6 +66,7 @@ export async function requireCurrentUser() {
   }
 
   const user = await getUserByEmail(email);
+  console.log('USER:', user);
 
   if (!user) {
     redirect('/login');
@@ -72,8 +74,6 @@ export async function requireCurrentUser() {
 
   return user;
 }
-
-
 
 export async function getUserTasks(userId: number) {
   return await sql`

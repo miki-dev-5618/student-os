@@ -23,8 +23,8 @@ model Assignment {
   name         String
   deadline     DateTime
   subjectId    Int
-  createdAt DateTime @default(now())
-updatedAt DateTime? @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime? @updatedAt
   subject      Subject  @relation(fields: [subjectId], references: [subjectId])
   status      WorkStatus @default(TODO)
 
@@ -37,8 +37,8 @@ model Task {
   deadline    DateTime
   status      WorkStatus @default(TODO)
   subjectId   Int?
-  createdAt DateTime @default(now())
-updatedAt DateTime? @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime? @updatedAt
   subject     Subject?   @relation(fields: [subjectId], references: [subjectId])
 }
 
