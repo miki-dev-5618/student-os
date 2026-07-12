@@ -10,11 +10,11 @@ import {
   getUserByEmail,
   getPendingTasks,
   getUserExams,
-  getUserAssignments,
   getRecentActivity,
 } from '@/services/user.service';
 import { redirect } from 'next/navigation';
 import { getUserSubjects } from '@/services/subjects.service';
+import { getUserAssignments } from '@/services/assignments.service';
 import { getGreeting } from '@/services/greeting';
 import StatsCard from '@/app/components/StatsCard';
 import RecentActivity from '@/app/components/RecentActivity';

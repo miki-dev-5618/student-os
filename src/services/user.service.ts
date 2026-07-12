@@ -73,14 +73,7 @@ export async function requireCurrentUser() {
   return user;
 }
 
-export async function getUserAssignments(userId: number) {
-  return await sql`
-    SELECT * FROM "Assignment"
-    WHERE "subjectId" IN (
-      SELECT "subjectId" FROM "Subject" WHERE "userId" = ${userId}
-    )
-  `;
-}
+
 
 export async function getUserTasks(userId: number) {
   return await sql`
