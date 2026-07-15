@@ -28,7 +28,6 @@ export async function createUser(formData: FormData) {
   try {
     await sql`
     INSERT INTO "Users"(name, email, passwordHash) VALUES (${name}, ${email}, ${passwordHash})`;
-    console.log('User created successfully');
   } catch (error) {
     console.error('Error creating user:', error);
     return { success: false, message: 'Error creating user' };

@@ -24,8 +24,7 @@ export async function createUser(formData: FormData) {
   try {
     await sql`
     INSERT INTO "User"(name, email, password) VALUES (${name}, ${email}, ${passwordHash})`;
-    console.log('User created successfully');
-  } catch (error) {
+   } catch (error) {
     console.error('Error creating user:', error);
     throw error;
   }
@@ -55,7 +54,6 @@ export async function getUserByEmail(email: string) {
 
 export async function requireCurrentUser() {
   const session = await auth();
-  console.log('SESSION:', session);
   if (!session) {
     redirect('/login');
   }
@@ -66,7 +64,6 @@ export async function requireCurrentUser() {
   }
 
   const user = await getUserByEmail(email);
-  console.log('USER:', user);
 
   if (!user) {
     redirect('/login');
