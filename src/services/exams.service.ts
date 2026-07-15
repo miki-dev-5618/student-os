@@ -4,8 +4,10 @@ const sql = postgres(process.env.DATABASE_URL!, { ssl: 'require' });
 
 export async function getUserExams(userId: number) {
   return await sql`
-    SELECT * FROM "Exam"
-    WHERE "subjectId" IN (
+    SELECT e.*, s.name as "subjectName"
+    FROM "Exam" e
+    LEFT JOIN "Subject" s ON e."subjectId" = s."subjectId"
+    WHERE e."subjectId" IN (
       SELECT "subjectId" FROM "Subject" WHERE "userId" = ${userId}
     )
   `;
