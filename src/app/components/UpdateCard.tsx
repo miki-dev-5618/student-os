@@ -17,7 +17,6 @@ export default function EditForm({
   return (
     <form action={formAction} className='space-y-4'>
      {children}
-      <button type='submit'>Save Changes</button>
 
       <button
         type='submit'

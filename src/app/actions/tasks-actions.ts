@@ -21,6 +21,7 @@ export async function updateTaskAction(taskId: number, formData: FormData) {
   const taskDescription = (formData.get('taskDescription') || '') as string;
   const deadlineStr = formData.get('deadline') as string;
   const subjectId = Number(formData.get('subjectId'));
+  const status = (formData.get('status') || 'To Do') as string;
 
   const parsedDate = deadlineStr ? new Date(deadlineStr) : new Date();
   const validDeadline = isNaN(parsedDate.getTime()) ? new Date() : parsedDate;
@@ -31,6 +32,7 @@ export async function updateTaskAction(taskId: number, formData: FormData) {
     taskDescription,
     subjectId,
     validDeadline,
+    status
   );
 
   revalidatePath('/tasks');

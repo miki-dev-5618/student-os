@@ -19,7 +19,8 @@ export default function Page() {
   const [formOpen, setFormOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedTask, setSelectedTask] = useState<any | null>(null);
-
+  const [statusDropdown, setStatusDropdown] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<any | null>(null);
   useEffect(() => {
     fetch('/api/tasks')
       .then((res) => {
@@ -43,12 +44,12 @@ export default function Page() {
 
   const formattedDeadline = selectedTask?.deadline
     ? (() => {
-        const d = new Date(selectedTask.deadline);
-        const year = d.getFullYear();
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-      })()
+      const d = new Date(selectedTask.deadline);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    })()
     : '';
 
   if (loading) {
@@ -59,7 +60,16 @@ export default function Page() {
     return <div>Failed to load tasks!</div>;
   }
 
-  console.log(selectedTask);
+  const handleSelectStatus = (status: any) => {
+    setSelectedStatus(status);
+    setStatusDropdown(false);
+  };
+
+  const statusList = [
+    { name: 'To Do' },
+    { name: 'In Progress' },
+    { name: 'Completed' },
+  ];
 
   return (
     <div className='p-8 max-w-6xl mx-auto space-y-8 text-neutral-800 dark:text-neutral-100'>
@@ -185,7 +195,10 @@ export default function Page() {
                 <tr
                   key={task.taskId}
                   className='cursor-pointer hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30 transition-colors'
-                  onClick={() => setSelectedTask(task)}
+                  onClick={() => {
+                    setSelectedTask(task);
+                    setSelectedStatus({ name: task.status || 'To Do' });
+                  }}
                 >
                   <td className='px-6 py-4 whitespace-nowrap text-sm font-semibold'>
                     {task.title}
@@ -198,13 +211,12 @@ export default function Page() {
                   </td>
                   <td className='px-6 py-4 whitespace-nowrap text-sm'>
                     <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                        task.status === 'Completed'
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${task.status === 'Completed'
                           ? 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300'
                           : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-950/40 dark:text-yellow-300'
-                      }`}
+                        }`}
                     >
-                      {task.status || 'Pending'}
+                      {task.status || 'To Do'}
                     </span>
                   </td>
                 </tr>
@@ -215,22 +227,52 @@ export default function Page() {
         {selectedTask && (
           <DetailsCard
             title={selectedTask.title}
-            date={new Date(selectedTask.deadline)}
-            subject={selectedTask.subjectName}
-            subtitle={selectedTask.subtitle}
-            reflection={selectedTask.reflection}
-            status={selectedTask.status}
+            fields={[
+              { label: 'Subject', value: selectedTask.subjectName },
+              { label: 'Deadline', value: formattedDeadline },
+              { label: 'Description', value: selectedTask.description },
+              { label: 'Status', value: selectedTask.status || 'To Do' },
+            ]}
             editForm={
               <EditForm
                 formAction={updateTaskAction.bind(null, selectedTask.taskId)}
               >
                 <input name='taskTitle' defaultValue={selectedTask.title} />
-                <input name='taskDescription' defaultValue={selectedTask.description} />
+                <input
+                  name='taskDescription'
+                  defaultValue={selectedTask.description}
+                />
                 <input
                   type='date'
                   name='deadline'
                   defaultValue={formattedDeadline}
                 />
+                <div className='relative w-full'>
+                  <input
+                    type='text'
+                    onClick={() => setStatusDropdown(true)}
+                    name='status'
+                    value={selectedStatus?.name || 'To Do'}
+                    readOnly
+                    className='cursor-pointer w-full px-3.5 py-2 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all'
+                  />
+                  {statusDropdown && (
+                    <div className='absolute z-10 w-full mt-1 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-lg shadow-lg max-h-60 overflow-y-auto'>
+                      {statusList.map((status: any) => (
+                        <div
+                          key={status.name}
+                          onClick={() => handleSelectStatus(status)}
+                          className='cursor-pointer px-4 py-2.5 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors first:rounded-t-lg last:rounded-b-lg'
+                        >
+                          <p className='font-medium text-sm text-neutral-900 dark:text-neutral-50'>
+                            {status.name}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
                 <SubjectDropdown
                   subjectsList={subjects}
                   defaultSubjectId={selectedTask.subjectId}

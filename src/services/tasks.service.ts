@@ -5,8 +5,10 @@ const sql = postgres(process.env.DATABASE_URL!, { ssl: 'require' });
 
 export async function getUserTasks(userId: number) {
   return await sql`
-  SELECT * FROM "Task"
-    WHERE "subjectId" IN (
+    SELECT t.*, s.name as "subjectName"
+    FROM "Task" t
+    LEFT JOIN "Subject" s ON t."subjectId" = s."subjectId"
+    WHERE t."subjectId" IN (
       SELECT "subjectId" FROM "Subject" WHERE "userId" = ${userId}
     )
   `;
@@ -42,12 +44,13 @@ export async function updateTask(
   title: string,
   description: string,
   subjectId: number,
-  deadline: Date
+  deadline: Date,
+  status: string
 ) {
   try {
     await sql`
       UPDATE "Task"
-      SET "title" = ${title}, "description" = ${description}, "subjectId" = ${subjectId}, "deadline" = ${deadline}
+      SET "title" = ${title}, "description" = ${description}, "subjectId" = ${subjectId}, "deadline" = ${deadline}, "status" = ${status}
       WHERE "taskId" = ${taskId}
     `;
   } catch (error) {
