@@ -36,3 +36,22 @@ export async function getUserAssignments(userId: number) {
     )
   `;
 }
+
+export async function updateTask(
+  taskId: number,
+  title: string,
+  description: string,
+  subjectId: number,
+  deadline: Date
+) {
+  try {
+    await sql`
+      UPDATE "Task"
+      SET "title" = ${title}, "description" = ${description}, "subjectId" = ${subjectId}, "deadline" = ${deadline}
+      WHERE "taskId" = ${taskId}
+    `;
+  } catch (error) {
+    console.error('Error updating task: ', error);
+    throw error;
+  }
+}

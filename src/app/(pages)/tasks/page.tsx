@@ -2,9 +2,14 @@
 import { useEffect, useState } from 'react';
 import { getUserSubjects } from '@/services/subjects.service';
 import { requireCurrentUser } from '@/services/user.service';
-import { createTaskAction } from '@/app/actions/tasks-actions';
+import {
+  createTaskAction,
+  updateTaskAction,
+} from '@/app/actions/tasks-actions';
 import SearchBar from '@/app/components/SearchBar';
 import SubjectDropdown from '@/app/components/subjectDropdown';
+import EditForm from '@/app/components/UpdateCard';
+import DetailsCard from '@/app/components/DetailsCard';
 
 export default function Page() {
   const [data, setData] = useState<{
@@ -13,21 +18,38 @@ export default function Page() {
   } | null>(null);
   const [formOpen, setFormOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [selectedTask, setSelectedTask] = useState<any | null>(null);
 
   useEffect(() => {
     fetch('/api/tasks')
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to fetch tasks');
+        }
+        return res.json();
+      })
       .then((data) => {
         setData(data);
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
+        setData(null);
         setLoading(false);
       });
   }, []);
 
-  const { tasks, subjects } = data || { tasks: [], subjects: [] };
+  const { tasks = [], subjects = [] } = data || {};
+
+  const formattedDeadline = selectedTask?.deadline
+    ? (() => {
+        const d = new Date(selectedTask.deadline);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      })()
+    : '';
 
   if (loading) {
     return <div>Loading tasks...</div>;
@@ -36,6 +58,8 @@ export default function Page() {
   if (!data) {
     return <div>Failed to load tasks!</div>;
   }
+
+  console.log(selectedTask);
 
   return (
     <div className='p-8 max-w-6xl mx-auto space-y-8 text-neutral-800 dark:text-neutral-100'>
@@ -160,7 +184,8 @@ export default function Page() {
               tasks.map((task: any) => (
                 <tr
                   key={task.taskId}
-                  className='hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30 transition-colors'
+                  className='cursor-pointer hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30 transition-colors'
+                  onClick={() => setSelectedTask(task)}
                 >
                   <td className='px-6 py-4 whitespace-nowrap text-sm font-semibold'>
                     {task.title}
@@ -187,6 +212,33 @@ export default function Page() {
             )}
           </tbody>
         </table>
+        {selectedTask && (
+          <DetailsCard
+            title={selectedTask.title}
+            date={new Date(selectedTask.deadline)}
+            subject={selectedTask.subjectName}
+            subtitle={selectedTask.subtitle}
+            reflection={selectedTask.reflection}
+            status={selectedTask.status}
+            editForm={
+              <EditForm
+                formAction={updateTaskAction.bind(null, selectedTask.taskId)}
+              >
+                <input name='taskTitle' defaultValue={selectedTask.title} />
+                <input name='taskDescription' defaultValue={selectedTask.description} />
+                <input
+                  type='date'
+                  name='deadline'
+                  defaultValue={formattedDeadline}
+                />
+                <SubjectDropdown
+                  subjectsList={subjects}
+                  defaultSubjectId={selectedTask.subjectId}
+                />
+              </EditForm>
+            }
+          />
+        )}
       </div>
     </div>
   );

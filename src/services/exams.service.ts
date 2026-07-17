@@ -12,6 +12,7 @@ export async function getUserExams(userId: number) {
     )
   `;
 }
+
 export async function createExam(title: string, examDate: Date, subjectId: number) {
   try {
     await sql`
@@ -24,4 +25,15 @@ export async function createExam(title: string, examDate: Date, subjectId: numbe
   }
 }
 
-
+export async function updateExam(examId: number, title: string, examDate: Date, subjectId: number) {
+  try {
+    await sql`
+  UPDATE "Exam" 
+  SET "title" = ${title}, "examDate"=${examDate}, "subjectId"=${subjectId}
+  WHERE "examId" = ${examId}
+`;
+  } catch (error) {
+    console.error('Error updating exam: ', error);
+    throw error;
+  }
+}

@@ -4,11 +4,17 @@ import { useState } from 'react';
 
 export default function SubjectDropdown({
   subjectsList,
+  defaultSubjectId,
 }: {
   subjectsList: any[];
+  defaultSubjectId?: number;
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedSubject, setSelectedSubject] = useState<any | null>(null);
+  const [selectedSubject, setSelectedSubject] = useState<any | null>(
+    defaultSubjectId !== undefined
+      ? subjectsList.find((s) => s.subjectId === defaultSubjectId) || null
+      : null
+  );
 
   const toggleDropdown = (e: React.MouseEvent) => {
     e.preventDefault();
