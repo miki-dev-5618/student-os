@@ -11,6 +11,12 @@ import SubjectDropdown from '@/app/components/subjectDropdown';
 import EditForm from '@/app/components/UpdateCard';
 import DetailsCard from '@/app/components/DetailsCard';
 
+const DB_TO_UI: Record<string, string> = {
+  'TODO': 'To Do',
+  'IN_PROGRESS': 'In Progress',
+  'DONE': 'Completed'
+};
+
 export default function Page() {
   const [data, setData] = useState<{
     tasks: any[];
@@ -197,7 +203,7 @@ export default function Page() {
                   className='cursor-pointer hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30 transition-colors'
                   onClick={() => {
                     setSelectedTask(task);
-                    setSelectedStatus({ name: task.status || 'To Do' });
+                    setSelectedStatus({ name: DB_TO_UI[task.status] || task.status || 'To Do' });
                   }}
                 >
                   <td className='px-6 py-4 whitespace-nowrap text-sm font-semibold'>
@@ -211,12 +217,12 @@ export default function Page() {
                   </td>
                   <td className='px-6 py-4 whitespace-nowrap text-sm'>
                     <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${task.status === 'Completed'
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${(task.status === 'Completed' || task.status === 'DONE')
                           ? 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300'
                           : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-950/40 dark:text-yellow-300'
                         }`}
                     >
-                      {task.status || 'To Do'}
+                      {DB_TO_UI[task.status] || task.status || 'To Do'}
                     </span>
                   </td>
                 </tr>
@@ -231,7 +237,7 @@ export default function Page() {
               { label: 'Subject', value: selectedTask.subjectName },
               { label: 'Deadline', value: formattedDeadline },
               { label: 'Description', value: selectedTask.description },
-              { label: 'Status', value: selectedTask.status || 'To Do' },
+              { label: 'Status', value: DB_TO_UI[selectedTask.status] || selectedTask.status || 'To Do' },
             ]}
             editForm={
               <EditForm

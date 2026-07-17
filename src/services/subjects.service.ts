@@ -54,3 +54,16 @@ export async function getSubjectAssignments(userId: number) {
   `;
 }
 
+export async function updateSubject(subjectId: number, name: string) {
+  try {
+    await sql`
+      UPDATE "Subject"
+      SET "name" = ${name}
+      WHERE "subjectId" = ${subjectId}
+    `;
+  } catch (error) {
+    console.error('Error updating subject: ', error);
+    throw error;
+  }
+}
+

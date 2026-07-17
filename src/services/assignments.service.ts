@@ -25,3 +25,22 @@ export async function createAssignment(
     throw error;
   }
 }
+
+export async function updateAssignment(
+  assignmentId: number,
+  name: string,
+  deadline: Date,
+  subjectId: number,
+  status: string,
+) {
+  try {
+    await sql`
+      UPDATE "Assignment"
+      SET "name" = ${name}, "deadline" = ${deadline}, "subjectId" = ${subjectId}, "status" = ${status}
+      WHERE "assignmentId" = ${assignmentId}
+    `;
+  } catch (error) {
+    console.error('Error updating assignment: ', error);
+    throw error;
+  }
+}

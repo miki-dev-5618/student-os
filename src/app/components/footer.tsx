@@ -22,12 +22,12 @@ export default function Footer() {
           </h4>
           <ul className='flex flex-col gap-2 text-sm text-zinc-600 dark:text-zinc-300'>
             <li>
-              <a href='#features' className='hover:text-zinc-900 dark:hover:text-white hover:underline underline-offset-4 transition-colors'>
+              <a href='/#features' className='hover:text-zinc-900 dark:hover:text-white hover:underline underline-offset-4 transition-colors'>
                 Features
               </a>
             </li>
             <li>
-              <a href='#how-it-works' className='hover:text-zinc-900 dark:hover:text-white hover:underline underline-offset-4 transition-colors'>
+              <a href='/#how-it-works' className='hover:text-zinc-900 dark:hover:text-white hover:underline underline-offset-4 transition-colors'>
                 How It Works
               </a>
             </li>

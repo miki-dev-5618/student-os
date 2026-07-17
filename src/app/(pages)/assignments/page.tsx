@@ -2,9 +2,17 @@
 import { useEffect, useState } from 'react';
 import { getUserSubjects } from '@/services/subjects.service';
 import { requireCurrentUser } from '@/services/user.service';
-import { createAssignmentAction } from '@/app/actions/assignments-actions';
+import { createAssignmentAction, updateAssignmentAction } from '@/app/actions/assignments-actions';
 import SearchBar from '@/app/components/SearchBar';
 import SubjectDropdown from '@/app/components/subjectDropdown';
+import DetailsCard from '@/app/components/DetailsCard';
+import EditForm from '@/app/components/UpdateCard';
+
+const DB_TO_UI: Record<string, string> = {
+  'TODO': 'Pending',
+  'IN_PROGRESS': 'In Progress',
+  'DONE': 'Completed'
+};
 
 export default function Page() {
   const [data, setData] = useState<{
@@ -16,6 +24,8 @@ export default function Page() {
   const [selectedAssignment, setSelectedAssignment] = useState<any | null>(
     null,
   );
+  const [statusDropdown, setStatusDropdown] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<any | null>(null);
 
   useEffect(() => {
     fetch('/api/assignments')
@@ -30,7 +40,27 @@ export default function Page() {
       });
   }, []);
 
-  const { subjects, assignments } = data || { subjects: [], assignments: [] };
+  const { subjects = [], assignments = [] } = data || {};
+
+  const formattedDeadline = selectedAssignment?.deadline
+    ? (() => {
+        const d = new Date(selectedAssignment.deadline);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      })()
+    : '';
+
+  const handleSelectStatus = (status: any) => {
+    setSelectedStatus(status);
+    setStatusDropdown(false);
+  };
+
+  const statusList = [
+    { name: 'Pending' },
+    { name: 'Completed' },
+  ];
 
   if (loading) {
     return <div>Loading assignments...</div>;
@@ -157,14 +187,17 @@ export default function Page() {
             ) : (
               assignments.map((assignment: any) => (
                 <tr
-                  onClick={() => setSelectedAssignment(assignment)}
+                  onClick={() => {
+                    setSelectedAssignment(assignment);
+                    setSelectedStatus({ name: DB_TO_UI[assignment.status] || assignment.status || 'Pending' });
+                  }}
                   key={assignment.assignmentId}
-                  className='hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30 transition-colors'
+                  className='cursor-pointer hover:bg-neutral-50/50 dark:hover:bg-neutral-800/30 transition-colors'
                 >
                   <td className='px-6 py-4 whitespace-nowrap text-sm font-semibold'>
                     {assignment.name}
                   </td>
-                  <td className='px-6 py-4 whitespace-nowrap text-sm text-neutral-500'>
+                  <td className='px-6 py-4 whitespace-nowrap text-sm text-neutral-550'>
                     {assignment.subjectName}
                   </td>
                   <td className='px-6 py-4 whitespace-nowrap text-sm text-neutral-550'>
@@ -173,12 +206,12 @@ export default function Page() {
                   <td className='px-6 py-4 whitespace-nowrap text-sm'>
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                        assignment.status === 'Completed'
+                        (assignment.status === 'Completed' || assignment.status === 'DONE')
                           ? 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300'
                           : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-950/40 dark:text-yellow-300'
                       }`}
                     >
-                      {assignment.status || 'Pending'}
+                      {DB_TO_UI[assignment.status] || assignment.status || 'Pending'}
                     </span>
                   </td>
                 </tr>
@@ -186,34 +219,65 @@ export default function Page() {
             )}
           </tbody>
         </table>
-         {selectedAssignment && (
-                  <DetailsCard
-                    title={selectedAssignment.title}
-                    date={new Date(selectedAssignment.deadline)}
-                    subject={selectedAssignment.subjectName}
-                    subtitle={selectedAssignment.subtitle}
-                    reflection={selectedAssignment.reflection}
-                    status={selectedAssignment.status}
-                    editForm={
-                      <EditForm
-                        formAction={updateTaskAction.bind(null, selectedTask.taskId)}
-                      >
-                        <input name='taskTitle' defaultValue={selectedTask.title} />
-                        <input name='taskDescription' defaultValue={selectedTask.description} />
-                        <input
-                          type='date'
-                          name='deadline'
-                          defaultValue={formattedDeadline}
-                        />
-                        <SubjectDropdown
-                          subjectsList={subjects}
-                          defaultSubjectId={selectedTask.subjectId}
-                        />
-                      </EditForm>
-                    }
-                  />
-                )}
       </div>
+
+      {selectedAssignment && (
+        <DetailsCard
+          title={selectedAssignment.name}
+          fields={[
+            { label: 'Subject', value: selectedAssignment.subjectName },
+            { label: 'Deadline', value: formattedDeadline },
+            { label: 'Status', value: DB_TO_UI[selectedAssignment.status] || selectedAssignment.status || 'Pending' },
+          ]}
+          editForm={
+            <EditForm
+              formAction={updateAssignmentAction.bind(null, selectedAssignment.assignmentId)}
+            >
+              <input
+                name='assignmentName'
+                defaultValue={selectedAssignment.name}
+                className='w-full px-3.5 py-2 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all'
+              />
+              <input
+                type='date'
+                name='deadline'
+                defaultValue={formattedDeadline}
+                className='w-full px-3.5 py-2 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all'
+              />
+              <div className='relative w-full'>
+                <input
+                  type='text'
+                  onClick={() => setStatusDropdown(true)}
+                  name='status'
+                  value={selectedStatus?.name || 'Pending'}
+                  readOnly
+                  className='cursor-pointer w-full px-3.5 py-2 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all'
+                />
+                {statusDropdown && (
+                  <div className='absolute z-10 w-full mt-1 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-lg shadow-lg max-h-60 overflow-y-auto'>
+                    {statusList.map((status: any) => (
+                      <div
+                        key={status.name}
+                        onClick={() => handleSelectStatus(status)}
+                        className='cursor-pointer px-4 py-2.5 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors first:rounded-t-lg last:rounded-b-lg'
+                      >
+                        <p className='font-medium text-sm text-neutral-900 dark:text-neutral-50'>
+                          {status.name}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <SubjectDropdown
+                subjectsList={subjects}
+                defaultSubjectId={selectedAssignment.subjectId}
+              />
+            </EditForm>
+          }
+        />
+      )}
     </div>
   );
 }

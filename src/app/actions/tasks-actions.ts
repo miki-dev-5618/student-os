@@ -16,12 +16,23 @@ export async function createTaskAction(formData: FormData) {
   redirect('/tasks');
 }
 
+const STATUS_MAP: Record<string, string> = {
+  'To Do': 'TODO',
+  'In Progress': 'IN_PROGRESS',
+  'Completed': 'DONE',
+  'Pending': 'TODO',
+  'TODO': 'TODO',
+  'IN_PROGRESS': 'IN_PROGRESS',
+  'DONE': 'DONE'
+};
+
 export async function updateTaskAction(taskId: number, formData: FormData) {
   const taskTitle = (formData.get('taskTitle') || formData.get('title') || '') as string;
   const taskDescription = (formData.get('taskDescription') || '') as string;
   const deadlineStr = formData.get('deadline') as string;
   const subjectId = Number(formData.get('subjectId'));
-  const status = (formData.get('status') || 'To Do') as string;
+  const rawStatus = (formData.get('status') || 'To Do') as string;
+  const status = STATUS_MAP[rawStatus] || 'TODO';
 
   const parsedDate = deadlineStr ? new Date(deadlineStr) : new Date();
   const validDeadline = isNaN(parsedDate.getTime()) ? new Date() : parsedDate;

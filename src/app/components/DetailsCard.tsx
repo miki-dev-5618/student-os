@@ -5,7 +5,7 @@ import { LuPencilLine } from 'react-icons/lu';
 type DetailsCardProps = {
   title: string;
   editForm?: React.ReactNode;
-  fields: Field[];
+  fields?: Field[];
   //legacy props for backward compatibility
   date?: Date;
   subject?: string;

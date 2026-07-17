@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import SubjectCard from '@/app/components/SubjectCard';
 import SearchBar from '@/app/components/SearchBar';
 import SubjectDetails from '@/app/components/SubjectDetails';
-import { createSubjectAction } from '@/app/actions/subjects-actions';
+import { createSubjectAction, updateSubjectAction } from '@/app/actions/subjects-actions';
+import EditForm from '@/app/components/UpdateCard';
 
 export default function Page() {
   const [data, setData] = useState<{
@@ -105,6 +106,19 @@ export default function Page() {
           assignment={filterAssignments}
           task={filterTasks}
           exam={filterExams}
+          editForm={
+            <EditForm
+              formAction={updateSubjectAction.bind(null, selectedSubject.subjectId)}
+            >
+              <input
+                type='text'
+                name='subjectName'
+                defaultValue={selectedSubject.name}
+                className='w-full px-3.5 py-2 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all'
+                required
+              />
+            </EditForm>
+          }
         />
       )}
     </div>
