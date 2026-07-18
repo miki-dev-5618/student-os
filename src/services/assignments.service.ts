@@ -44,3 +44,16 @@ export async function updateAssignment(
     throw error;
   }
 }
+
+export async function deleteAssignment(assignmentId: number) {
+  try {
+    await sql`
+      DELETE FROM "Assignment"
+      WHERE "assignmentId" = ${assignmentId}
+    `;
+  } catch (error) {
+    console.error('Error deleting assignment: ', error);
+    throw error;
+  }
+}
+

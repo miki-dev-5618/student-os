@@ -1,4 +1,4 @@
 export default function Page() {
-    return <p>calender page</p>;
+    return <p>coming soon!</p>;
 
 }

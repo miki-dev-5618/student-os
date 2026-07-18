@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { getUserSubjects } from '@/services/subjects.service';
 import { requireCurrentUser } from '@/services/user.service';
-import { createAssignmentAction, updateAssignmentAction } from '@/app/actions/assignments-actions';
+import { createAssignmentAction, updateAssignmentAction, deleteAssignmentAction } from '@/app/actions/assignments-actions';
 import SearchBar from '@/app/components/SearchBar';
 import SubjectDropdown from '@/app/components/subjectDropdown';
 import DetailsCard from '@/app/components/DetailsCard';
@@ -224,6 +224,7 @@ export default function Page() {
       {selectedAssignment && (
         <DetailsCard
           title={selectedAssignment.name}
+          deleteAction={deleteAssignmentAction.bind(null, selectedAssignment.assignmentId)}
           fields={[
             { label: 'Subject', value: selectedAssignment.subjectName },
             { label: 'Deadline', value: formattedDeadline },

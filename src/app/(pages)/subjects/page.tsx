@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import SubjectCard from '@/app/components/SubjectCard';
 import SearchBar from '@/app/components/SearchBar';
 import SubjectDetails from '@/app/components/SubjectDetails';
-import { createSubjectAction, updateSubjectAction } from '@/app/actions/subjects-actions';
+import { createSubjectAction, updateSubjectAction, deleteSubjectAction } from '@/app/actions/subjects-actions';
 import EditForm from '@/app/components/UpdateCard';
 
 export default function Page() {
@@ -106,6 +106,7 @@ export default function Page() {
           assignment={filterAssignments}
           task={filterTasks}
           exam={filterExams}
+          deleteAction={deleteSubjectAction.bind(null, selectedSubject.subjectId)}
           editForm={
             <EditForm
               formAction={updateSubjectAction.bind(null, selectedSubject.subjectId)}

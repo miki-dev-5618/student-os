@@ -1,6 +1,6 @@
 'use server';
 
-import { createExam, updateExam } from '@/services/exams.service';
+import { createExam, updateExam, deleteExam } from '@/services/exams.service';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -25,3 +25,10 @@ export async function updateExamAction(examId: number, formData: FormData) {
   revalidatePath('/exams');
   redirect('/exams');
 }
+
+export async function deleteExamAction(examId: number) {
+  await deleteExam(examId);
+  revalidatePath('/exams');
+  redirect('/exams');
+}
+

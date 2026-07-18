@@ -1,6 +1,6 @@
 'use server';
 
-import { createAssignment, updateAssignment } from '@/services/assignments.service';
+import { createAssignment, updateAssignment, deleteAssignment } from '@/services/assignments.service';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -40,3 +40,10 @@ export async function updateAssignmentAction(assignmentId: number, formData: For
   revalidatePath('/assignments');
   redirect('/assignments');
 }
+
+export async function deleteAssignmentAction(assignmentId: number) {
+  await deleteAssignment(assignmentId);
+  revalidatePath('/assignments');
+  redirect('/assignments');
+}
+

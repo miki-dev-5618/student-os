@@ -1,4 +1,4 @@
 export default function Page() {
-    return <p>study sessions page</p>;
+    return <p>coming soon!</p>;
 
 }

@@ -58,3 +58,16 @@ export async function updateTask(
     throw error;
   }
 }
+
+export async function deleteTask(taskId: number) {
+  try {
+    await sql`
+      DELETE FROM "Task"
+      WHERE "taskId" = ${taskId}
+    `;
+  } catch (error) {
+    console.error('Error deleting task: ', error);
+    throw error;
+  }
+}
+

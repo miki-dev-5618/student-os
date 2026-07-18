@@ -1,6 +1,6 @@
 "use client"
 import { useState } from 'react';
-import { LuPencilLine } from 'react-icons/lu';
+import { LuPencilLine, LuTrash2 } from 'react-icons/lu';
 
 type SubjectCardProps = {
   name: string;
@@ -8,9 +8,10 @@ type SubjectCardProps = {
   task: any[];
   exam: any[];
   editForm?: React.ReactNode;
+  deleteAction?: (formData: FormData) => void | Promise<void>;
 };
 
-export default function SubjectDetails({ name, assignment, task, exam, editForm }: SubjectCardProps) {
+export default function SubjectDetails({ name, assignment, task, exam, editForm, deleteAction }: SubjectCardProps) {
   const [isEdit, setIsEdit] = useState(false);
 
   return (
@@ -24,14 +25,31 @@ export default function SubjectDetails({ name, assignment, task, exam, editForm 
             {task.length} Tasks | {exam.length} Exams | {assignment.length} Assignments
           </p>
         </div>
-        {editForm && (
-          <button
-            onClick={() => setIsEdit(!isEdit)}
-            className='p-2 text-zinc-500 hover:text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors'
-          >
-            <LuPencilLine className='w-5 h-5' />
-          </button>
-        )}
+        <div className='flex items-center gap-2'>
+          {editForm && (
+            <button
+              onClick={() => setIsEdit(!isEdit)}
+              className='p-2 text-zinc-500 hover:text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors'
+            >
+              <LuPencilLine className='w-5 h-5' />
+            </button>
+          )}
+          {deleteAction && (
+            <form action={deleteAction} className='inline'>
+              <button
+                type='submit'
+                className='p-2 text-rose-500 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors'
+                onClick={(e) => {
+                  if (!confirm('Are you sure you want to delete this subject? This will also delete all associated tasks, assignments, and exams!')) {
+                    e.preventDefault();
+                  }
+                }}
+              >
+                <LuTrash2 className='w-5 h-5' />
+              </button>
+            </form>
+          )}
+        </div>
       </div>
 
       {isEdit && editForm && (

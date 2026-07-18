@@ -37,3 +37,16 @@ export async function updateExam(examId: number, title: string, examDate: Date, 
     throw error;
   }
 }
+
+export async function deleteExam(examId: number) {
+  try {
+    await sql`
+      DELETE FROM "Exam"
+      WHERE "examId" = ${examId}
+    `;
+  } catch (error) {
+    console.error('Error deleting exam: ', error);
+    throw error;
+  }
+}
+

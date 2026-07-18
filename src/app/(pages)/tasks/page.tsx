@@ -5,6 +5,7 @@ import { requireCurrentUser } from '@/services/user.service';
 import {
   createTaskAction,
   updateTaskAction,
+  deleteTaskAction,
 } from '@/app/actions/tasks-actions';
 import SearchBar from '@/app/components/SearchBar';
 import SubjectDropdown from '@/app/components/subjectDropdown';
@@ -233,6 +234,7 @@ export default function Page() {
         {selectedTask && (
           <DetailsCard
             title={selectedTask.title}
+            deleteAction={deleteTaskAction.bind(null, selectedTask.taskId)}
             fields={[
               { label: 'Subject', value: selectedTask.subjectName },
               { label: 'Deadline', value: formattedDeadline },

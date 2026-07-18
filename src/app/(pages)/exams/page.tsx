@@ -1,9 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { getUserSubjects } from '@/services/subjects.service';
-import { updateExamAction } from '@/app/actions/exams-actions';
+import { createExamAction, updateExamAction, deleteExamAction } from '@/app/actions/exams-actions';
 import { requireCurrentUser } from '@/services/user.service';
-import { createExamAction } from '@/app/actions/exams-actions';
 import SearchBar from '@/app/components/SearchBar';
 import SubjectDropdown from '@/app/components/subjectDropdown';
 import DetailsCard from '@/app/components/DetailsCard';
@@ -201,6 +200,7 @@ export default function Page() {
         {selectedExam && (
           <DetailsCard
             title={selectedExam.title}
+            deleteAction={deleteExamAction.bind(null, selectedExam.examId)}
             date={new Date(selectedExam.examDate)}
             subject={selectedExam.subjectName}
             subtitle={selectedExam.subtitle}

@@ -1,6 +1,6 @@
 'use server';
 
-import { createTask, updateTask } from '@/services/tasks.service';
+import { createTask, updateTask, deleteTask } from '@/services/tasks.service';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -49,3 +49,10 @@ export async function updateTaskAction(taskId: number, formData: FormData) {
   revalidatePath('/tasks');
   redirect('/tasks');
 }
+
+export async function deleteTaskAction(taskId: number) {
+  await deleteTask(taskId);
+  revalidatePath('/tasks');
+  redirect('/tasks');
+}
+

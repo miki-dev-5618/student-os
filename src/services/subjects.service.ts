@@ -67,3 +67,18 @@ export async function updateSubject(subjectId: number, name: string) {
   }
 }
 
+export async function deleteSubject(subjectId: number) {
+  try {
+    await sql.begin(async (sql) => {
+      await sql`DELETE FROM "Assignment" WHERE "subjectId" = ${subjectId}`;
+      await sql`DELETE FROM "Exam" WHERE "subjectId" = ${subjectId}`;
+      await sql`DELETE FROM "Task" WHERE "subjectId" = ${subjectId}`;
+      await sql`DELETE FROM "Subject" WHERE "subjectId" = ${subjectId}`;
+    });
+  } catch (error) {
+    console.error('Error deleting subject: ', error);
+    throw error;
+  }
+}
+
+

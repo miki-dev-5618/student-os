@@ -1,6 +1,6 @@
 "use server"
 
-import { createSubject, updateSubject } from '@/services/subjects.service';
+import { createSubject, updateSubject, deleteSubject } from '@/services/subjects.service';
 import { requireCurrentUser } from '@/services/user.service';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -22,3 +22,10 @@ export async function updateSubjectAction(subjectId: number, formData: FormData)
   revalidatePath('/subjects');
   redirect('/subjects');
 }
+
+export async function deleteSubjectAction(subjectId: number) {
+  await deleteSubject(subjectId);
+  revalidatePath('/subjects');
+  redirect('/subjects');
+}
+

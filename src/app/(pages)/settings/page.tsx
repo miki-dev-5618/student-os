@@ -1,4 +1,4 @@
 export default function Page() {
-    return <p>settings page</p>;
+    return <p>coming soon!</p>;
 
 }
