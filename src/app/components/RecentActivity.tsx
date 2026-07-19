@@ -1,4 +1,5 @@
 import React from 'react';
+import { LuActivity } from 'react-icons/lu';
 
 interface Activity {
   activityId: number;
@@ -15,54 +16,55 @@ interface RecentActivityProps {
 }
 
 const actionMeta: Record<string, { label: string; color: string }> = {
-  TASK_CREATED: { label: 'Created Task', color: 'bg-blue-500/10 text-blue-600 dark:text-blue-400' },
-  TASK_COMPLETED: { label: 'Completed Task', color: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' },
-  TASK_REOPENED: { label: 'Reopened Task', color: 'bg-amber-500/10 text-amber-600 dark:text-amber-400' },
-  TASK_DELETED: { label: 'Deleted Task', color: 'bg-rose-500/10 text-rose-600 dark:text-rose-400' },
-  EXAM_CREATED: { label: 'Scheduled Exam', color: 'bg-purple-500/10 text-purple-600 dark:text-purple-400' },
-  EXAM_COMPLETED: { label: 'Completed Exam', color: 'bg-green-500/10 text-green-600 dark:text-green-400' },
-  EXAM_UPDATED: { label: 'Updated Exam', color: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400' },
-  ASSIGNMENT_CREATED: { label: 'Added Assignment', color: 'bg-sky-500/10 text-sky-600 dark:text-sky-400' },
-  ASSIGNMENT_COMPLETED: { label: 'Completed Assignment', color: 'bg-teal-500/10 text-teal-600 dark:text-teal-400' },
+  TASK_CREATED: { label: 'Created Task', color: 'bg-nectar-pink/40 text-auburn border border-auburn/20' },
+  TASK_COMPLETED: { label: 'Completed Task', color: 'bg-nectar-pink text-auburn border border-auburn/30 font-black' },
+  TASK_REOPENED: { label: 'Reopened Task', color: 'bg-sunset text-zinc-950 border border-auburn/20' },
+  TASK_DELETED: { label: 'Deleted Task', color: 'bg-auburn/10 text-auburn border border-auburn/20' },
+  EXAM_CREATED: { label: 'Scheduled Exam', color: 'bg-crisp-carrot/20 text-auburn border border-auburn/20' },
+  EXAM_COMPLETED: { label: 'Completed Exam', color: 'bg-nectar-pink text-auburn border border-auburn/30 font-black' },
+  EXAM_UPDATED: { label: 'Updated Exam', color: 'bg-sunset text-zinc-950 border border-auburn/20' },
+  ASSIGNMENT_CREATED: { label: 'Added Assignment', color: 'bg-crisp-carrot/20 text-auburn border border-auburn/20' },
+  ASSIGNMENT_COMPLETED: { label: 'Completed Assignment', color: 'bg-nectar-pink text-auburn border border-auburn/30 font-black' },
 };
 
 export default function RecentActivity({ recentActivity }: RecentActivityProps) {
   return (
-    <section className='rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900 p-6 shadow-sm hover:shadow-md transition-shadow duration-300'>
-      <h2 className='text-lg font-bold tracking-tight mb-4 flex items-center gap-2'>
-        <span className='h-2.5 w-2.5 rounded-full bg-purple-500' />
+    <section className="rounded-3xl border-2 border-auburn bg-white p-6 shadow-soft hover-lift">
+      <h2 className="text-xl font-serif font-black tracking-tight mb-5 flex items-center gap-2.5 text-auburn">
+        <div className="p-2.5 bg-nectar-pink/40 text-auburn rounded-xl border border-auburn/20">
+          <LuActivity size={20} />
+        </div>
         Recent Activity
       </h2>
       <div>
         {recentActivity.length === 0 ? (
-          <div className='flex flex-col items-center justify-center py-8 text-center text-zinc-400 dark:text-zinc-500 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl'>
-            <p className='text-2xl'>✨</p>
-            <p className='text-sm mt-1 font-medium'>No recent activities logged yet</p>
+          <div className="flex flex-col items-center justify-center py-10 text-center border-2 border-dashed border-auburn/20 rounded-2xl bg-nectar-cream/20">
+            <div className="text-3xl animate-bounce">✨</div>
+            <p className="text-sm font-serif font-black mt-2 text-auburn">No recent activities logged yet</p>
+            <p className="text-xs font-semibold text-auburn/70 mt-0.5">Your study timeline will appear here!</p>
           </div>
         ) : (
-          <ul className='divide-y divide-zinc-100 dark:divide-zinc-800/60'>
+          <ul className="divide-y-2 divide-auburn/10">
             {recentActivity.map((activity) => {
               const meta = actionMeta[activity.action] || {
                 label: activity.action,
-                color: 'bg-zinc-500/10 text-zinc-600 dark:text-zinc-400',
+                color: 'bg-nectar-cream text-auburn border border-auburn/20',
               };
               return (
                 <li
                   key={activity.activityId}
-                  className='flex flex-col sm:flex-row sm:items-center justify-between py-3.5 gap-2 first:pt-0 last:pb-0'
+                  className="flex flex-col sm:flex-row sm:items-center justify-between py-4 gap-3 first:pt-0 last:pb-0 group"
                 >
-                  <div className='flex items-center gap-3'>
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${meta.color}`}>
+                  <div className="flex items-center gap-3">
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold tracking-wide ${meta.color}`}>
                       {meta.label}
                     </span>
-                    <span className='text-sm font-semibold text-zinc-800 dark:text-zinc-200'>
+                    <span className="text-sm font-bold text-auburn group-hover:translate-x-0.5 transition-transform">
                       {activity.titleSnapshot}
                     </span>
                   </div>
-                  <span className='text-xs text-zinc-400 dark:text-zinc-500 self-start sm:self-center'>
-                    {new Date(activity.createdAt).toLocaleString(undefined, {
-                      month: 'short',
-                      day: 'numeric',
+                  <span className="text-xs font-bold text-auburn/50 self-end sm:self-auto">
+                    {new Date(activity.createdAt).toLocaleTimeString(undefined, {
                       hour: '2-digit',
                       minute: '2-digit',
                     })}

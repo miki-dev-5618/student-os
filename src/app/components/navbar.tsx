@@ -9,33 +9,35 @@ export default async function Navbar() {
   const user = email ? await getUserByEmail(email) : null;
 
   return (
-    <header className='sticky top-0 z-40 w-full border-b border-zinc-200/80 bg-white/80 backdrop-blur-md dark:border-zinc-800/80 dark:bg-zinc-900/80'>
-      <div className='mx-auto flex max-w-6xl h-16 items-center justify-between px-6'>
-        <div className='flex items-center gap-2.5'>
+    <header className="sticky top-0 z-40 w-full border-b-2 border-auburn bg-nectar-pink text-auburn shadow-soft transition-all duration-300">
+      <div className="mx-auto flex max-w-6xl h-16 items-center justify-between px-6">
+        <div className="flex items-center gap-2.5">
           {session ? (
-            <PathName />
+            <div className="bg-white/80 px-4 py-1.5 rounded-full border border-auburn/20 text-xs font-black shadow-sm text-auburn">
+              <PathName />
+            </div>
           ) : (
             <Link
-              href='/'
-              className='text-xl font-bold tracking-tight bg-gradient-to-r from-red-600 to-rose-500 bg-clip-text text-transparent dark:from-red-500 dark:to-orange-400 font-sans'
+              href="/"
+              className="text-xl font-serif font-black tracking-tight text-auburn hover:scale-[1.01] transition-transform"
             >
               Student OS
             </Link>
           )}
         </div>
 
-        <div className='flex items-center gap-4'>
+        <div className="flex items-center gap-4">
           {session ? (
             <>
-              <div className='hidden sm:flex flex-col text-right'>
-                <span className='text-sm font-semibold text-zinc-800 dark:text-zinc-200'>
+              <div className="hidden sm:flex flex-col text-right">
+                <span className="text-sm font-bold text-auburn">
                   {session.user?.name || 'Student'}
                 </span>
-                <span className='text-xs text-zinc-500 dark:text-zinc-450'>
+                <span className="text-[10px] font-bold text-auburn/70 tracking-wider">
                   {session.user?.email}
                 </span>
               </div>
-              <div className='h-9 w-9 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center font-bold text-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-700'>
+              <div className="h-9 w-9 rounded-full bg-sunset text-zinc-950 flex items-center justify-center font-black text-sm border-2 border-auburn shadow-soft transform hover:rotate-12 transition-transform">
                 {(session.user?.name || session.user?.email || 'U')
                   .charAt(0)
                   .toUpperCase()}
@@ -47,24 +49,24 @@ export default async function Navbar() {
                 }}
               >
                 <button
-                  type='submit'
-                  className='rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3.5 py-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-300 shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-800 active:scale-[0.98] transition-all'
+                  type="submit"
+                  className="rounded-full bg-auburn hover:bg-auburn/95 px-4 py-1.5 text-xs font-bold text-white shadow-soft hover:scale-[1.03] active:scale-[0.97] transition-all border border-auburn/20 cursor-pointer"
                 >
                   Logout
                 </button>
               </form>
             </>
           ) : (
-            <div className='flex items-center gap-4'>
+            <div className="flex items-center gap-5">
               <Link
-                href='/login'
-                className='text-sm font-semibold text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors'
+                href="/login"
+                className="text-sm font-bold text-auburn hover:text-auburn/70 transition-colors"
               >
                 Sign In
               </Link>
               <Link
-                href='/signup'
-                className='rounded-xl bg-red-500 hover:bg-red-600 dark:bg-red-650 dark:hover:bg-red-600 text-white px-4 py-2 text-sm font-semibold shadow-sm hover:shadow-md transition-all active:scale-[0.98]'
+                href="/signup"
+                className="rounded-full bg-auburn hover:bg-auburn/95 hover:scale-[1.03] text-white px-5 py-2 text-sm font-bold shadow-soft active:scale-[0.97] transition-all border border-auburn/20"
               >
                 Sign Up
               </Link>

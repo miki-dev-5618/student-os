@@ -1,26 +1,23 @@
 'use client';
 
-import SubjectDropdown from '@/app/components/subjectDropdown';
-
 interface EditFormProps {
   formAction: (formData: FormData) => void | Promise<void>;
   children: React.ReactNode;
 }
 
 export default function EditForm({
- formAction, children
+  formAction,
+  children,
 }: EditFormProps) {
-
-  // Format Date for input type="date" (YYYY-MM-DD)
-
-
   return (
-    <form action={formAction} className='space-y-4'>
-     {children}
+    <form action={formAction} className="space-y-4">
+      <div className="space-y-3">
+        {children}
+      </div>
 
       <button
-        type='submit'
-        className='w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors shadow-sm mt-2'
+        type="submit"
+        className="w-full px-5 py-2.5 bg-kiwi hover:bg-kiwi/95 text-zinc-950 rounded-full text-sm font-extrabold transition-all duration-150 shadow-md hover:scale-[1.01] active:scale-[0.99] border-2 border-forest-green/10 mt-3"
       >
         Save Changes
       </button>

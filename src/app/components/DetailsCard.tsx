@@ -1,6 +1,8 @@
 'use client';
+
 import { useState } from 'react';
 import { LuPencilLine, LuTrash2 } from 'react-icons/lu';
+import { Sparkle } from './Doodle';
 
 type DetailsCardProps = {
   title: string;
@@ -29,60 +31,68 @@ export default function DetailsCard({
   const [isEdit, setIsEdit] = useState(false);
 
   return (
-    <div className='rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 transition-all hover:shadow-md'>
-      <div className='flex justify-between items-center mb-2'>
-        <div className='flex items-center gap-2'>
+    <div className="rounded-3xl border-2 border-auburn bg-white p-6 shadow-soft relative overflow-hidden transition-all hover:scale-[1.01] text-auburn">
+      {/* Decorative top header strip */}
+      <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-auburn via-sunset to-burnt-sienna" />
+      
+      <div className="flex justify-between items-center mb-4 pt-1">
+        <div className="flex items-center gap-2">
           {editForm && (
             <button
               onClick={() => setIsEdit(!isEdit)}
-              className='p-1.5 text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-350 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors'
+              className={`p-2 border border-auburn/20 text-auburn bg-nectar-cream/30 hover:bg-nectar-pink/40 rounded-xl transition-all hover:scale-105 active:scale-95 flex items-center gap-1 text-xs font-bold cursor-pointer ${isEdit ? 'bg-sunset text-zinc-950 border-transparent shadow-sm' : ''}`}
             >
-              <LuPencilLine className='w-4 h-4' />
+              <LuPencilLine className="w-4 h-4" />
+              <span>{isEdit ? 'Close Edit' : 'Edit Details'}</span>
             </button>
           )}
           {deleteAction && (
-            <form action={deleteAction} className='inline'>
+            <form action={deleteAction} className="inline">
               <button
-                type='submit'
-                className='p-1.5 text-rose-500 hover:text-rose-700 dark:hover:text-rose-450 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-lg transition-colors'
+                type="submit"
+                className="p-2 border border-auburn/25 text-auburn bg-auburn/5 hover:bg-auburn/15 rounded-xl transition-all hover:scale-105 active:scale-95 flex items-center gap-1 text-xs font-bold cursor-pointer"
                 onClick={(e) => {
                   if (!confirm('Are you sure you want to delete this?')) {
                     e.preventDefault();
                   }
                 }}
               >
-                <LuTrash2 className='w-4 h-4' />
+                <LuTrash2 className="w-4 h-4" />
+                <span>Delete</span>
               </button>
             </form>
           )}
         </div>
+        <Sparkle size={16} className="text-auburn animate-pulse" />
       </div>
-      <div className='flex items-start justify-between'>
-        <div className='space-y-1.5'>
-          {fields &&
-            fields.map((field, idx) => (
-              <div
-                key={idx}
-                className='text-xs text-zinc-550 dark:text-zinc-400'
-              >
+
+      <div className="space-y-4">
+        {title && (
+          <h3 className="text-xl font-serif font-black tracking-tight text-auburn capitalize leading-none">
+            {title}
+          </h3>
+        )}
+
+        {fields && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-nectar-cream/30 p-4 rounded-2xl border-2 border-auburn/10">
+            {fields.map((field, idx) => (
+              <div key={idx} className="flex flex-col gap-0.5">
                 {field.label && (
-                  <span className='font-semibold text-zinc-400 dark:text-zinc-550 mr-1'>
-                    {field.label}:
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-auburn/50">
+                    {field.label}
                   </span>
                 )}
-                <span>{field.value}</span>
+                <span className="text-sm font-bold text-auburn">
+                  {field.value}
+                </span>
               </div>
             ))}
-          {title && (
-            <h3 className='text-sm font-medium text-zinc-500 dark:text-zinc-400'>
-              {title}
-            </h3>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {isEdit && editForm && (
-        <div className='mt-4 pt-4 border-t border-zinc-150 dark:border-zinc-800'>
+        <div className="mt-5 pt-5 border-t-2 border-dashed border-auburn/10 animate-fadeIn">
           {editForm}
         </div>
       )}
