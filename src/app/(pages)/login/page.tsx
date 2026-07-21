@@ -23,7 +23,15 @@ export default async function Page() {
           <h2 className="text-3xl font-extrabold tracking-tight text-forest-green dark:text-cream">Welcome Back</h2>
           <Smiley size={24} className="text-kiwi" />
         </div>
-        <p className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-6">Enter your details below to access your Student OS workspace.</p>
+        <div className="mb-6 rounded-2xl border border-kiwi/30 bg-kiwi/10 p-3.5 text-xs text-forest-green dark:text-cream">
+          <p className="font-extrabold uppercase tracking-wider text-[10px] text-kiwi-700 dark:text-kiwi-300 mb-1">
+            Demo Credentials
+          </p>
+          <div className="flex flex-col gap-0.5 font-mono text-[11px] text-zinc-700 dark:text-zinc-300">
+            <p><span className="font-semibold text-zinc-500 dark:text-zinc-400">Email:</span> test123@gmail.com</p>
+            <p><span className="font-semibold text-zinc-500 dark:text-zinc-400">Password:</span> test@123</p>
+          </div>
+        </div>
 
         <LoginForm />
 
