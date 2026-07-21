@@ -2,6 +2,8 @@
 
 Streamline your academic life with **Student OS** — a unified workspace designed to help students track tasks, manage assignments, log study sessions, prepare for exams, and visualize progress in one beautiful dashboard.
 
+**🚀 Live Demo:** [studentos.navyaa-dev.me](https://studentos.navyaa-dev.me)
+
 ---
 
 ## ✨ Features

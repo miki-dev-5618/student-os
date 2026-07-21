@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Student OS",
   description: "Manage your academic life",
+  icons: {
+    icon: "/snoopy.svg",
+  },
 };
 
 export default async function RootLayout({
