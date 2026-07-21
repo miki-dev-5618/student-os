@@ -1,4 +1,4 @@
-import { createUser } from '@/services/user.service';
+import { createUser, getUserByEmail } from '@/services/user.service';
 import { auth } from '@/services/auth';
 import { redirect } from 'next/navigation';
 import { Sparkle, Smiley } from '@/app/components/Doodle';
@@ -6,7 +6,8 @@ import { LuUser, LuMail, LuLock } from 'react-icons/lu';
 
 export default async function Page() {
   const session = await auth();
-  if (session) {
+  const dbUser = session?.user?.email ? await getUserByEmail(session.user.email) : null;
+  if (dbUser) {
     redirect('/dashboard');
   }
 

@@ -4,18 +4,20 @@ import { FaArrowRight } from 'react-icons/fa';
 import { LuBookOpen, LuClipboardCheck, LuCalendar, LuTrendingUp, LuArrowRight } from 'react-icons/lu';
 import { auth } from '@/services/auth';
 import { redirect } from 'next/navigation';
+import { getUserByEmail } from '@/services/user.service';
 import { Sparkle, Star, Smiley, PaperAirplane, Arrow } from '../components/Doodle';
 
 export default async function Home() {
   const session = await auth();
-  if (session) {
+  const dbUser = session?.user?.email ? await getUserByEmail(session.user.email) : null;
+  if (dbUser) {
     redirect('/dashboard');
   }
 
   return (
     <div className="flex flex-col min-h-screen bg-app grid-bg font-sans text-forest-green dark:text-cream transition-colors duration-300">
       <main className="flex-1 flex flex-col items-center w-full px-6 sm:px-8 md:px-16 py-16 sm:py-24 max-w-7xl mx-auto relative overflow-hidden">
-        
+
         {/* Floating background doodle assets */}
         <div className="absolute top-12 left-10 text-sunshine/30 animate-bounce pointer-events-none hidden md:block">
           <Star size={48} />
@@ -70,7 +72,7 @@ export default async function Home() {
         {/* Dashboard Preview Image */}
         <div className="w-full relative mb-24 rounded-3xl border-2 border-forest-green/10 dark:border-kiwi/20 bg-white/50 dark:bg-zinc-900/50 p-3 shadow-soft overflow-hidden backdrop-blur-sm group hover:scale-[1.01] transition-transform">
           <img
-            src="/dashboard.jpeg"
+            src="/dashboard.png"
             alt="Student OS Dashboard Preview"
             className="rounded-2xl w-full object-cover shadow-inner border-2 border-forest-green/5 dark:border-zinc-800"
           />
@@ -183,7 +185,6 @@ export default async function Home() {
 
       </main>
 
-      <Footer />
     </div>
   );
 }

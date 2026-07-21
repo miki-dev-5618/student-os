@@ -80,10 +80,8 @@ export default function Footer() {
 
       <div className="max-w-7xl mx-auto mt-12 pt-6 border-t-2 border-auburn/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] font-bold text-auburn/60 uppercase tracking-wider">
         <p>&copy; {new Date().getFullYear()} Student OS. All rights reserved.</p>
-        <div className="flex gap-6">
-          <a href="/privacy" className="hover:underline">Privacy Policy</a>
-          <a href="/terms" className="hover:underline">Terms of Service</a>
-        </div>
+        <p>Made with 💌 by Miki</p>
+
       </div>
     </footer>
   );
